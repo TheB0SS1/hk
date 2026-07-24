@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Index · Master Landing</title>
+  <style>
+    /* ---------- RESET & BASE ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      cursor: none;
+    }
+
+    body {
+      background: #0b0b0f;
+      color: rgba(255, 255, 255, 0.92);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-weight: 400;
+      line-height: 1.5;
+      min-height: 100vh;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* ---------- SMOOTH SCROLL (momentum) ---------- */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* ---------- CUSTOM CURSOR ---------- */
+    .cursor {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(120, 180, 255, 0.7) 0%, rgba(180, 120, 255, 0.3) 70%);
+      mix-blend-mode: screen;
+      transform: translate(-50%, -50%);
+      transition: width 0.15s, height 0.15s, background 0.2s;
+      box-shadow: 0 0 40px rgba(90, 150, 255, 0.6);
+      will-change: transform, left, top;
+      backdrop-filter: blur(2px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .cursor-glow {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      width: 350px;
+      height: 350px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(70, 130, 255, 0.12) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s;
+      will-change: transform, left, top;
+      mix-blend-mode: screen;
+    }
+
+    /* ---------- LOADING SCREEN ---------- */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: #0b0b0f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1), backdrop-filter 0.8s;
+      backdrop-filter: blur(12px);
+      opacity: 1;
+      pointer-events: all;
+    }
+    #loader.hide {
+      opacity: 0;
+      pointer-events: none;
+      backdrop-filter: blur(0px);
+    }
+    .loader-logo {
+      font-size: 3.2rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #a0c8ff, #b47aff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 40px rgba(90, 140, 255, 0.3);
+      animation: pulseGlow 2.2s infinite alternate ease-in-out;
+    }
+    .loader-progress {
+      margin-top: 1.8rem;
+      width: 180px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(70, 130, 255, 0.2);
+    }
+    .loader-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #7aaaff, #b47aff);
+      border-radius: 12px;
+      box-shadow: 0 0 20px #6a8aff;
+      transition: width 0.3s ease;
+    }
+    .loader-percent {
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 0.6rem;
+      font-weight: 300;
+    }
+
+    @keyframes pulseGlow {
+      0% { text-shadow: 0 0 20px rgba(90, 140, 255, 0.2); }
+      100% { text-shadow: 0 0 60px rgba(150, 120, 255, 0.5); }
+    }
+
+    /* ---------- MESH / AURORA BACKGROUND ---------- */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: #0b0b0f;
+    }
+
+    /* ---------- NOISE OVERLAY ---------- */
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 300px 300px;
+    }
+
+    /* ---------- FLOATING 1.PNG (decorative) ---------- */
+    .floating-asset {
+      position: fixed;
+      bottom: 8%;
+      right: 6%;
+      z-index: 2;
+      width: min(180px, 25vw);
+      opacity: 0.5;
+      pointer-events: none;
+      filter: drop-shadow(0 0 40px rgba(100, 150, 255, 0.25)) blur(0.4px);
+      animation: floatAsset 9s infinite alternate ease-in-out;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    .floating-asset img {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: transparent;
+      transform: rotateY(6deg) rotateX(4deg);
+      transition: transform 0.2s ease;
+      filter: drop-shadow(0 10px 40px rgba(60, 120, 255, 0.2));
+    }
+    @keyframes floatAsset {
+      0% { transform: translateY(0px) rotate(-2deg) scale(1); }
+      100% { transform: translateY(-28px) rotate(3deg) scale(1.02); }
+    }
+
+    /* ---------- MAIN CONTENT ---------- */
+    .main {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.8rem 3rem;
+      backdrop-filter: blur(1px);
+    }
+
+    /* ----- HERO ----- */
+    .hero {
+      text-align: center;
+      max-width: 1300px;
+      width: 100%;
+      margin: 0 auto;
+      padding-top: 2vh;
+    }
+
+    .hero-title {
+      font-size: clamp(3.4rem, 12vw, 6.8rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.05;
+      background: linear-gradient(135deg, #f0f6ff 0%, #b4ccff 50%, #b47aff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 80px rgba(80, 140, 255, 0.15);
+      margin-bottom: 0.4rem;
+      animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2.2vw, 1.5rem);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 3.2rem;
+      backdrop-filter: blur(2px);
+      animation: fadeUp 1s 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    /* ----- CARDS GRID ----- */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      width: 100%;
+      max-width: 1260px;
+      margin: 1.5rem auto 0;
+      perspective: 1200px;
+    }
+
+    /* CARD */
+    .card {
+      background: rgba(20, 25, 40, 0.25);
+      backdrop-filter: blur(16px) saturate(1.3);
+      -webkit-backdrop-filter: blur(16px) saturate(1.3);
+      border-radius: 2.8rem;
+      padding: 2.4rem 1.8rem 2.8rem;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      transform-style: preserve-3d;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(40px) scale(0.96) blur(6px);
+      animation: cardEntrance 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      will-change: transform, opacity;
+    }
+    .card:nth-child(1) { animation-delay: 0.1s; }
+    .card:nth-child(2) { animation-delay: 0.25s; }
+    .card:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes cardEntrance {
+      0% { opacity: 0; transform: translateY(40px) scale(0.96) blur(6px); }
+      60% { transform: translateY(-8px) scale(1.01) blur(0px); }
+      100% { opacity: 1; transform: translateY(0) scale(1) blur(0px); }
+    }
+
+    /* glass reflection & animated border */
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 2.8rem;
+      padding: 1.5px;
+      background: conic-gradient(from 0deg, rgba(120, 180, 255, 0.4), rgba(180, 120, 255, 0.4), rgba(120, 180, 255, 0.4));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      transition: all 0.4s;
+      opacity: 0.5;
+      animation: borderSpin 8s linear infinite;
+    }
+    @keyframes borderSpin {
+      0% { background: conic-gradient(from 0deg, rgba(120, 180, 255, 0.5), rgba(180, 120, 255, 0.5), rgba(120, 180, 255, 0.5)); }
+      100% { background: conic-gradient(from 360deg, rgba(120, 180, 255, 0.5), rgba(180, 120, 255, 0.5), rgba(120, 180, 255, 0.5)); }
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.03), transparent 50%);
+      pointer-events: none;
+      mix-blend-mode: overlay;
+      opacity: 0.3;
+      transition: 0.5s;
+    }
+
+    .card:hover::after {
+      opacity: 0.6;
+      transform: scale(1.1);
+    }
+
+    /* light sweep */
+    .card .light-sweep {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.05), transparent 60%);
+      transform: rotate(15deg);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    .card:hover .light-sweep {
+      opacity: 1;
+    }
+
+    /* card content */
+    .card h2 {
+      font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #eef4ff, #bccaff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      z-index: 2;
+    }
+    .card p {
+      font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.55);
+      max-width: 280px;
+      margin: 0.25rem auto 1.6rem;
+      line-height: 1.6;
+      position: relative;
+      z-index: 2;
+    }
+    .card-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.7rem 2rem 0.7rem 2.2rem;
+      border-radius: 60px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      color: #f0f6ff;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      text-decoration: none;
+      box-shadow: 0 0 20px rgba(70, 130, 255, 0.05);
+      position: relative;
+      z-index: 5;
+      cursor: none;
+      transform: translateZ(20px);
+      will-change: transform;
+    }
+    .card-btn span {
+      transition: transform 0.25s;
+      display: inline-block;
+    }
+    .card-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(140, 180, 255, 0.3);
+      box-shadow: 0 0 50px rgba(90, 150, 255, 0.2);
+      transform: scale(1.03) translateY(-2px);
+    }
+    .card-btn:hover span {
+      transform: translateX(6px);
+    }
+    .card-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* 3D hover & reflection via JS */
+
+    /* footer */
+    .footer {
+      margin-top: 4.5rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      color: rgba(255, 255, 255, 0.15);
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
+      padding-top: 2rem;
+      width: 100%;
+      max-width: 1260px;
+      text-align: center;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 800px) {
+      .cards-grid { gap: 1.5rem; }
+      .card { padding: 2rem 1.2rem; }
+      .floating-asset { width: 100px; bottom: 4%; right: 4%; }
+    }
+    @media (max-width: 500px) {
+      .hero-title { font-size: 2.8rem; }
+      .card { border-radius: 2rem; }
+    }
+
+    /* ---------- UTILITY ---------- */
+    .fade-up {
+      animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(18px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---------- MOUSE INTERACTIVE LIGHT (via JS) ---------- */
+    .interactive-light {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 3;
+      background: radial-gradient(circle at 50% 50%, rgba(100, 150, 255, 0.04) 0%, transparent 60%);
+      transition: background 0.2s;
+      will-change: background;
+    }
+
+    /* ---------- SCROLLBAR ---------- */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #0b0b0f; }
+    ::-webkit-scrollbar-thumb { background: rgba(120, 180, 255, 0.25); border-radius: 10px; }
+
+    /* for card tilt reflection */
+    .card-glow {
+      position: absolute;
+      inset: 0;
+      border-radius: 2.8rem;
+      pointer-events: none;
+      box-shadow: 0 0 60px rgba(100, 150, 255, 0.0);
+      transition: box-shadow 0.3s;
+    }
+    .card:hover .card-glow {
+      box-shadow: 0 0 70px rgba(120, 170, 255, 0.12);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOADING -->
+  <div id="loader">
+    <div class="loader-logo">✦</div>
+    <div class="loader-progress"><div class="loader-progress-bar" id="progressBar"></div></div>
+    <div class="loader-percent" id="percentText">0%</div>
+  </div>
+
+  <!-- CURSOR -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- BACKGROUND MESH (canvas) -->
+  <canvas id="bg-canvas"></canvas>
+  <div class="noise"></div>
+  <div class="interactive-light" id="interactiveLight"></div>
+
+  <!-- FLOATING 1.PNG -->
+  <div class="floating-asset" id="floatingAsset">
+    <img src="1.png" alt="decorative floating element" draggable="false" />
+  </div>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="hero">
+      <h1 class="hero-title">Choose Your Experience</h1>
+      <p class="hero-sub">Three distinct premium portfolios · one entrance</p>
+
+      <div class="cards-grid">
+        <!-- CARD 1 -->
+        <div class="card" data-link="1.html">
+          <div class="light-sweep"></div>
+          <div class="card-glow"></div>
+          <h2>Luxury Cinematic</h2>
+          <p>Minimal luxury portfolio inspired by Apple, Adobe and Awwwards.</p>
+          <a href="1.html" class="card-btn" data-magnetic>Open Experience <span>→</span></a>
+        </div>
+        <!-- CARD 2 -->
+        <div class="card" data-link="2.html">
+          <div class="light-sweep"></div>
+          <div class="card-glow"></div>
+          <h2>Creative Motion Studio</h2>
+          <p>Creative agency style with vibrant colours, bold layouts and energetic motion.</p>
+          <a href="2.html" class="card-btn" data-magnetic>Open Experience <span>→</span></a>
+        </div>
+        <!-- CARD 3 -->
+        <div class="card" data-link="3.html">
+          <div class="light-sweep"></div>
+          <div class="card-glow"></div>
+          <h2>Future Vision</h2>
+          <p>Ultra futuristic WebGL inspired portfolio with immersive 3D interactions.</p>
+          <a href="3.html" class="card-btn" data-magnetic>Open Experience <span>→</span></a>
+        </div>
+      </div>
+
+      <div class="footer">✦ luxury digital experiences</div>
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // ---------- LOADER ----------
+      let progress = 0;
+      const bar = document.getElementById('progressBar');
+      const percent = document.getElementById('percentText');
+      const loader = document.getElementById('loader');
+
+      function updateLoader() {
+        if (progress < 100) {
+          progress += Math.random() * 12 + 2;
+          if (progress > 100) progress = 100;
+          bar.style.width = progress + '%';
+          percent.textContent = Math.floor(progress) + '%';
+          setTimeout(updateLoader, 200 + Math.random() * 200);
+        } else {
+          setTimeout(() => {
+            loader.classList.add('hide');
+            document.body.style.overflow = 'auto';
+          }, 400);
+        }
+      }
+      updateLoader();
+
+      // ---------- CURSOR ----------
+      const cursor = document.getElementById('cursor');
+      const cursorGlow = document.getElementById('cursorGlow');
+      let mouseX = 0, mouseY = 0;
+      let cursorX = 0, cursorY = 0;
+      let glowX = 0, glowY = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        // interactive light
+        const light = document.getElementById('interactiveLight');
+        light.style.background = `radial-gradient(circle at ${mouseX}px ${mouseY}px, rgba(100, 150, 255, 0.07) 0%, transparent 55%)`;
+      });
+
+      function animateCursor() {
+        cursorX += (mouseX - cursorX) * 0.12;
+        cursorY += (mouseY - cursorY) * 0.12;
+        glowX += (mouseX - glowX) * 0.06;
+        glowY += (mouseY - glowY) * 0.06;
+
+        cursor.style.left = cursorX + 'px';
+        cursor.style.top = cursorY + 'px';
+        cursorGlow.style.left = glowX + 'px';
+        cursorGlow.style.top = glowY + 'px';
+
+        requestAnimationFrame(animateCursor);
+      }
+      animateCursor();
+
+      // cursor hover effects (buttons & cards)
+      const allInteractive = document.querySelectorAll('.card, .card-btn, .card h2, .card p');
+      allInteractive.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          cursor.style.width = '44px';
+          cursor.style.height = '44px';
+          cursor.style.background = 'radial-gradient(circle, rgba(160, 200, 255, 0.5) 0%, rgba(130, 100, 255, 0.2) 70%)';
+          cursor.style.border = '1px solid rgba(255,255,255,0.3)';
+        });
+        el.addEventListener('mouseleave', () => {
+          cursor.style.width = '20px';
+          cursor.style.height = '20px';
+          cursor.style.background = 'radial-gradient(circle, rgba(120, 180, 255, 0.7) 0%, rgba(180, 120, 255, 0.3) 70%)';
+          cursor.style.border = '1px solid rgba(255,255,255,0.2)';
+        });
+      });
+
+      // ---------- 3D TILT + PARALLAX CARDS ----------
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = ((y - centerY) / centerY) * -10;
+          const rotateY = ((x - centerX) / centerX) * 10;
+          card.style.transform =
+            `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02,1.02,1.02) translateZ(12px)`;
+          card.style.transition = 'transform 0.08s cubic-bezier(0.16, 1, 0.3, 1)';
+          // shadow depth
+          card.style.boxShadow =
+            `0 30px 70px -20px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06) inset, ${(rotateY*0.8)}px ${rotateX*0.8}px 60px rgba(80,130,255,0.08)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1) translateZ(0px)';
+          card.style.boxShadow =
+            '0 30px 70px -20px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.02) inset';
+          card.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s';
+        });
+      });
+
+      // ---------- MAGNETIC BUTTONS ----------
+      document.querySelectorAll('[data-magnetic]').forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          btn.style.transform = `translate(${x*0.2}px, ${y*0.2}px) scale(1.04)`;
+        });
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transform = 'translate(0px, 0px) scale(1)';
+        });
+      });
+
+      // ---------- RIPPLE CLICK (on cards) ----------
+      cards.forEach(card => {
+        card.addEventListener('click', (e) => {
+          const ripple = document.createElement('span');
+          ripple.style.position = 'fixed';
+          ripple.style.pointerEvents = 'none';
+          ripple.style.borderRadius = '50%';
+          ripple.style.width = '120px';
+          ripple.style.height = '120px';
+          ripple.style.background = 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%)';
+          ripple.style.left = (e.clientX - 60) + 'px';
+          ripple.style.top = (e.clientY - 60) + 'px';
+          ripple.style.transform = 'scale(0.2)';
+          ripple.style.opacity = '1';
+          ripple.style.zIndex = '999';
+          ripple.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s';
+          document.body.appendChild(ripple);
+          requestAnimationFrame(() => {
+            ripple.style.transform = 'scale(3)';
+            ripple.style.opacity = '0';
+          });
+          setTimeout(() => ripple.remove(), 700);
+        });
+      });
+
+      // ---------- OPEN LINKS (card click) ----------
+      cards.forEach(card => {
+        card.addEventListener('click', (e) => {
+          const link = card.querySelector('.card-btn');
+          if (link && !e.target.closest('.card-btn')) {
+            window.location.href = link.getAttribute('href');
+          }
+        });
+      });
+
+      // ---------- ANIMATED MESH BACKGROUND (canvas) ----------
+      const canvas = document.getElementById('bg-canvas');
+      const ctx = canvas.getContext('2d');
+      let w, h;
+
+      function resizeCanvas() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      const particles = [];
+      const count = 70;
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 2.2 + 0.6,
+          dx: (Math.random() - 0.5) * 0.25,
+          dy: (Math.random() - 0.5) * 0.25,
+          color: `hsla(${210 + Math.random()*40}, 70%, 70%, ${0.12 + Math.random()*0.12})`
+        });
+      }
+
+      let time = 0;
+      function drawBackground() {
+        ctx.clearRect(0, 0, w, h);
+
+        // gradient orbs
+        const grd = ctx.createRadialGradient(w*0.2, h*0.1, 100, w*0.3, h*0.2, w*0.7);
+        grd.addColorStop(0, 'rgba(90, 140, 255, 0.04)');
+        grd.addColorStop(0.3, 'rgba(120, 80, 255, 0.03)');
+        grd.addColorStop(0.7, 'rgba(30, 60, 120, 0.02)');
+        grd.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = grd;
+        ctx.fillRect(0, 0, w, h);
+
+        // moving glow
+        const glw = ctx.createRadialGradient(w*0.7 + Math.sin(time*0.002)*80, h*0.6 + Math.cos(time*0.003)*60, 50, w*0.7, h*0.6, w*0.5);
+        glw.addColorStop(0, 'rgba(160, 130, 255, 0.04)');
+        glw.addColorStop(0.6, 'rgba(60, 100, 255, 0.02)');
+        glw.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = glw;
+        ctx.fillRect(0, 0, w, h);
+
+        // particles
+        particles.forEach(p => {
+          p.x += p.dx;
+          p.y += p.dy;
+          if (p.x < 0 || p.x > w) p.dx *= -1;
+          if (p.y < 0 || p.y > h) p.dy *= -1;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+        });
+
+        time++;
+        requestAnimationFrame(drawBackground);
+      }
+      drawBackground();
+
+      // ---------- PARALLAX FLOATING ASSET (mouse) ----------
+      const asset = document.getElementById('floatingAsset');
+      document.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 12;
+        const y = (e.clientY / window.innerHeight - 0.5) * 8;
+        asset.style.transform = `translate(${x}px, ${y}px) rotate(${x*0.3}deg) scale(1.02)`;
+      });
+
+      // final touches: prevent default on btn clicks inside card
+      document.querySelectorAll('.card-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+      });
+
+    })();
+  </script>
+</body>
+</html>
