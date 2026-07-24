@@ -475,33 +475,33 @@
       <p class="hero-sub">Three distinct premium portfolios · one entrance</p>
 
       <div class="cards-grid">
-        <!-- CARD 1 -->
+        <!-- CARD 1 · Example 1 -->
         <div class="card" data-link="1.html">
           <div class="light-sweep"></div>
           <div class="card-glow"></div>
-          <h2>Luxury Cinematic</h2>
-          <p>Minimal luxury portfolio inspired by Apple, Adobe and Awwwards.</p>
+          <h2>Example 1</h2>
+          <p>Luxury cinematic portfolio · Apple & Awwwards inspired minimalism.</p>
           <a href="1.html" class="card-btn" data-magnetic>Open Experience <span>→</span></a>
         </div>
-        <!-- CARD 2 -->
+        <!-- CARD 2 · Example 2 -->
         <div class="card" data-link="2.html">
           <div class="light-sweep"></div>
           <div class="card-glow"></div>
-          <h2>Creative Motion Studio</h2>
-          <p>Creative agency style with vibrant colours, bold layouts and energetic motion.</p>
+          <h2>Example 2</h2>
+          <p>Creative motion studio · vibrant colour narratives & energetic flow.</p>
           <a href="2.html" class="card-btn" data-magnetic>Open Experience <span>→</span></a>
         </div>
-        <!-- CARD 3 -->
+        <!-- CARD 3 · Example 3 -->
         <div class="card" data-link="3.html">
           <div class="light-sweep"></div>
           <div class="card-glow"></div>
-          <h2>Future Vision</h2>
-          <p>Ultra futuristic WebGL inspired portfolio with immersive 3D interactions.</p>
+          <h2>Example 3</h2>
+          <p>Future vision · WebGL 3D interactions & immersive futuristic design.</p>
           <a href="3.html" class="card-btn" data-magnetic>Open Experience <span>→</span></a>
         </div>
       </div>
 
-      <div class="footer">✦ luxury digital experiences</div>
+      <div class="footer">✦ premium digital worlds</div>
     </div>
   </main>
 
@@ -541,7 +541,6 @@
       document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
-        // interactive light
         const light = document.getElementById('interactiveLight');
         light.style.background = `radial-gradient(circle at ${mouseX}px ${mouseY}px, rgba(100, 150, 255, 0.07) 0%, transparent 55%)`;
       });
@@ -561,7 +560,7 @@
       }
       animateCursor();
 
-      // cursor hover effects (buttons & cards)
+      // cursor hover effects
       const allInteractive = document.querySelectorAll('.card, .card-btn, .card h2, .card p');
       allInteractive.forEach(el => {
         el.addEventListener('mouseenter', () => {
@@ -592,7 +591,6 @@
           card.style.transform =
             `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02,1.02,1.02) translateZ(12px)`;
           card.style.transition = 'transform 0.08s cubic-bezier(0.16, 1, 0.3, 1)';
-          // shadow depth
           card.style.boxShadow =
             `0 30px 70px -20px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06) inset, ${(rotateY*0.8)}px ${rotateX*0.8}px 60px rgba(80,130,255,0.08)`;
         });
@@ -617,7 +615,7 @@
         });
       });
 
-      // ---------- RIPPLE CLICK (on cards) ----------
+      // ---------- RIPPLE CLICK ----------
       cards.forEach(card => {
         card.addEventListener('click', (e) => {
           const ripple = document.createElement('span');
@@ -681,7 +679,6 @@
       function drawBackground() {
         ctx.clearRect(0, 0, w, h);
 
-        // gradient orbs
         const grd = ctx.createRadialGradient(w*0.2, h*0.1, 100, w*0.3, h*0.2, w*0.7);
         grd.addColorStop(0, 'rgba(90, 140, 255, 0.04)');
         grd.addColorStop(0.3, 'rgba(120, 80, 255, 0.03)');
@@ -690,7 +687,6 @@
         ctx.fillStyle = grd;
         ctx.fillRect(0, 0, w, h);
 
-        // moving glow
         const glw = ctx.createRadialGradient(w*0.7 + Math.sin(time*0.002)*80, h*0.6 + Math.cos(time*0.003)*60, 50, w*0.7, h*0.6, w*0.5);
         glw.addColorStop(0, 'rgba(160, 130, 255, 0.04)');
         glw.addColorStop(0.6, 'rgba(60, 100, 255, 0.02)');
@@ -698,7 +694,6 @@
         ctx.fillStyle = glw;
         ctx.fillRect(0, 0, w, h);
 
-        // particles
         particles.forEach(p => {
           p.x += p.dx;
           p.y += p.dy;
@@ -715,7 +710,7 @@
       }
       drawBackground();
 
-      // ---------- PARALLAX FLOATING ASSET (mouse) ----------
+      // ---------- PARALLAX FLOATING ASSET ----------
       const asset = document.getElementById('floatingAsset');
       document.addEventListener('mousemove', (e) => {
         const x = (e.clientX / window.innerWidth - 0.5) * 12;
@@ -723,7 +718,6 @@
         asset.style.transform = `translate(${x}px, ${y}px) rotate(${x*0.3}deg) scale(1.02)`;
       });
 
-      // final touches: prevent default on btn clicks inside card
       document.querySelectorAll('.card-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
