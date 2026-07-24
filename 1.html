@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hesham Mahmoud Khalaf | Premium Medical Video Editor</title>
+<meta name="description" content="Premium Medical Video Editor helping doctors create cinematic content for social media, personal branding & patient attraction.">
+<meta property="og:title" content="Hesham Mahmoud Khalaf | Premium Medical Video Editor">
+<meta property="og:description" content="Helping Doctors Create Better Content for Social Media, Personal Branding & Attract More Patients.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hesham Mahmoud Khalaf | Premium Medical Video Editor">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+--black:#000;--bg:#050505;--bg2:#0a0a0a;--bg3:#111;
+--glass:rgba(255,255,255,0.04);--glass2:rgba(255,255,255,0.06);
+--glass-border:rgba(255,255,255,0.08);--glass-border2:rgba(255,255,255,0.12);
+--white:#fff;--grey1:#f5f5f5;--grey2:#d4d4d4;--grey3:#a3a3a3;--grey4:#737373;--grey5:#525252;--grey6:#333;--grey7:#1a1a1a;
+--blue:#3b82f6;--purple:#8b5cf6;--cyan:#06b6d4;--neon:#22d3ee;--pink:#ec4899;
+--grad1:linear-gradient(135deg,#3b82f6,#8b5cf6);--grad2:linear-gradient(135deg,#06b6d4,#3b82f6);--grad3:linear-gradient(135deg,#8b5cf6,#ec4899);
+--font-body:'Inter',sans-serif;--font-head:'Space Grotesk',sans-serif;
+--ease-out:cubic-bezier(0.16,1,0.3,1);--ease-elastic:cubic-bezier(0.68,-0.55,0.265,1.55);
+}
+html{scroll-behavior:auto}
+body{font-family:var(--font-body);background:var(--bg);color:var(--white);overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:none}
+body.loading{overflow:hidden}
+::selection{background:var(--blue);color:#fff}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--grey5);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--grey4)}
+a{text-decoration:none;color:inherit;cursor:none}
+button{cursor:none;border:none;background:none;font-family:inherit}
+img{display:block;max-width:100%}
+
+/* NOISE */
+.noise{position:fixed;inset:0;z-index:10000;pointer-events:none;opacity:.035;
+background:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* LOADER */
+#loader{position:fixed;inset:0;z-index:9999;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
+#loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.loader-logo{font-family:var(--font-head);font-size:3rem;font-weight:700;background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:0;animation:loaderFadeIn .8s var(--ease-out) forwards}
+.loader-bar-wrap{width:200px;height:2px;background:var(--grey7);border-radius:1px;margin-top:2rem;overflow:hidden}
+.loader-bar{height:100%;width:0;background:var(--grad1);border-radius:1px;transition:width .1s}
+.loader-pct{font-family:var(--font-head);font-size:.85rem;color:var(--grey4);margin-top:1rem;font-variant-numeric:tabular-nums}
+@keyframes loaderFadeIn{to{opacity:1}}
+
+/* CURSOR */
+.cursor-outer{position:fixed;width:40px;height:40px;border:1px solid rgba(255,255,255,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s var(--ease-out),height .3s var(--ease-out),border-color .3s,background .3s}
+.cursor-inner{position:fixed;width:6px;height:6px;background:#fff;border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
+.cursor-outer.hovering{width:60px;height:60px;border-color:var(--blue);background:rgba(59,130,246,.1)}
+.cursor-outer.clicking{transform:translate(-50%,-50%) scale(.8)}
+
+/* CANVAS */
+#particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ORBS */
+.orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none;will-change:transform}
+.orb-1{width:500px;height:500px;background:rgba(59,130,246,.15);top:10%;left:-5%;animation:orbMove1 25s ease-in-out infinite}
+.orb-2{width:400px;height:400px;background:rgba(139,92,246,.12);top:50%;right:-8%;animation:orbMove2 30s ease-in-out infinite}
+.orb-3{width:450px;height:450px;background:rgba(6,182,212,.1);bottom:-10%;left:30%;animation:orbMove3 28s ease-in-out infinite}
+@keyframes orbMove1{0%,100%{transform:translate(0,0)}25%{transform:translate(80px,60px)}50%{transform:translate(-40px,100px)}75%{transform:translate(60px,-40px)}}
+@keyframes orbMove2{0%,100%{transform:translate(0,0)}25%{transform:translate(-60px,-80px)}50%{transform:translate(50px,-40px)}75%{transform:translate(-30px,70px)}}
+@keyframes orbMove3{0%,100%{transform:translate(0,0)}25%{transform:translate(70px,-50px)}50%{transform:translate(-80px,30px)}75%{transform:translate(40px,60px)}}
+
+/* GRID BG */
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;mask-image:radial-gradient(ellipse 60% 50% at 50% 50%,black,transparent)}
+
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;transition:all .4s var(--ease-out);backdrop-filter:blur(0px);border-bottom:1px solid transparent}
+#nav.scrolled{background:rgba(5,5,5,.8);backdrop-filter:blur(20px);border-bottom-color:var(--glass-border);padding:1rem 2rem}
+.nav-logo{font-family:var(--font-head);font-size:1.5rem;font-weight:700;background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:2.5rem;align-items:center}
+.nav-links a{font-size:.8rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--grey3);transition:color .3s}
+.nav-links a:hover{color:var(--white)}
+.nav-cta{padding:.5rem 1.25rem;border:1px solid var(--glass-border2);border-radius:100px;font-size:.75rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--white);transition:all .3s var(--ease-out)}
+.nav-cta:hover{background:var(--white);color:var(--black);border-color:var(--white)}
+.hamburger{display:none;flex-direction:column;gap:5px;width:24px;cursor:none}
+.hamburger span{display:block;height:1.5px;background:var(--white);transition:all .3s}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(4px,5px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(4px,-5px)}
+.mobile-menu{position:fixed;inset:0;z-index:99;background:rgba(5,5,5,.95);backdrop-filter:blur(30px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;opacity:0;visibility:hidden;transition:all .4s var(--ease-out)}
+.mobile-menu.active{opacity:1;visibility:visible}
+.mobile-menu a{font-family:var(--font-head);font-size:2rem;font-weight:600;color:var(--grey3);transition:color .3s}
+.mobile-menu a:hover{color:var(--white)}
+
+/* SECTIONS */
+section{position:relative;z-index:1}
+.container{max-width:1280px;margin:0 auto;padding:0 2rem}
+.section-label{font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--blue);margin-bottom:1rem;display:flex;align-items:center;gap:.75rem}
+.section-label::before{content:'';width:30px;height:1px;background:var(--blue)}
+.section-title{font-family:var(--font-head);font-size:clamp(2rem,5vw,3.5rem);font-weight:600;line-height:1.1;letter-spacing:-.02em;margin-bottom:1.5rem}
+.section-desc{font-size:1.05rem;font-weight:300;color:var(--grey3);line-height:1.7;max-width:600px}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding-top:6rem}
+.hero-grid-bg{position:absolute;inset:0;opacity:.4}
+.hero-orbs{position:absolute;inset:0;overflow:hidden}
+.hero-content{position:relative;z-index:2;max-width:650px}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1rem;border:1px solid var(--glass-border2);border-radius:100px;font-size:.7rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--grey3);margin-bottom:2rem;backdrop-filter:blur(10px);background:var(--glass)}
+.hero-badge i{color:var(--blue);font-size:.6rem}
+.hero-title{font-family:var(--font-head);font-size:clamp(2.5rem,6vw,4.5rem);font-weight:700;line-height:1.05;letter-spacing:-.03em;margin-bottom:1.5rem}
+.hero-title .gradient{background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:1.1rem;font-weight:300;color:var(--grey3);line-height:1.7;margin-bottom:2.5rem;max-width:500px}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:3rem}
+.btn-primary{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;background:var(--grad1);color:#fff;font-size:.8rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;border-radius:100px;transition:all .3s var(--ease-out);position:relative;overflow:hidden}
+.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#2563eb,#7c3aed);opacity:0;transition:opacity .3s}
+.btn-primary:hover::before{opacity:1}
+.btn-primary span,.btn-primary i{position:relative;z-index:1}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 40px rgba(59,130,246,.3)}
+.btn-outline{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border:1px solid var(--glass-border2);color:var(--white);font-size:.8rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;border-radius:100px;transition:all .3s var(--ease-out)}
+.btn-outline:hover{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.3);transform:translateY(-2px)}
+.hero-socials{display:flex;gap:1.25rem}
+.hero-socials a{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid var(--glass-border);border-radius:50%;color:var(--grey4);font-size:.9rem;transition:all .3s var(--ease-out)}
+.hero-socials a:hover{color:var(--white);border-color:var(--blue);background:rgba(59,130,246,.1);transform:translateY(-3px)}
+.hero-image-wrap{position:absolute;right:5%;top:50%;transform:translateY(-50%);z-index:2}
+.hero-image-float{animation:heroFloat 6s ease-in-out infinite}
+.hero-image-3d{transition:transform .1s ease-out;position:relative}
+.hero-image-3d img{width:clamp(280px,30vw,480px);height:auto;filter:drop-shadow(0 20px 60px rgba(59,130,246,.2));pointer-events:none}
+.hero-image-glow{position:absolute;inset:-20%;background:radial-gradient(circle,rgba(59,130,246,.15),transparent 60%);pointer-events:none;filter:blur(40px)}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;z-index:2}
+.hero-scroll span{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--grey5)}
+.scroll-line{width:1px;height:40px;background:var(--grey6);position:relative;overflow:hidden}
+.scroll-line::after{content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;background:var(--blue);animation:scrollDown 2s ease-in-out infinite}
+@keyframes scrollDown{0%{top:-100%}100%{top:100%}}
+
+/* ABOUT */
+#about{padding:8rem 0;position:relative;overflow:hidden}
+.about-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:4rem;align-items:center}
+.about-visual{position:relative;aspect-ratio:4/5;border-radius:1.5rem;overflow:hidden;background:var(--glass);border:1px solid var(--glass-border)}
+.about-visual img{width:100%;height:100%;object-fit:cover;opacity:.6}
+.about-visual-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--bg),transparent 50%)}
+.about-visual-badge{position:absolute;bottom:1.5rem;left:1.5rem;padding:1rem 1.5rem;background:rgba(0,0,0,.6);backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:1rem}
+.about-visual-badge .num{font-family:var(--font-head);font-size:1.8rem;font-weight:700;background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.about-visual-badge .txt{font-size:.7rem;color:var(--grey3);letter-spacing:.05em;text-transform:uppercase}
+.about-text p{font-size:1rem;font-weight:300;color:var(--grey3);line-height:1.8;margin-bottom:1.25rem}
+.about-text p strong{color:var(--white);font-weight:500}
+.about-highlights{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem}
+.about-hl{padding:1.25rem;background:var(--glass);border:1px solid var(--glass-border);border-radius:1rem;transition:all .3s var(--ease-out)}
+.about-hl:hover{border-color:var(--glass-border2);background:var(--glass2);transform:translateY(-2px)}
+.about-hl i{font-size:1.2rem;color:var(--blue);margin-bottom:.5rem;display:block}
+.about-hl h4{font-family:var(--font-head);font-size:.9rem;font-weight:600;margin-bottom:.25rem}
+.about-hl p{font-size:.78rem;color:var(--grey4);line-height:1.5;margin:0}
+
+/* WHY ME */
+#why{padding:8rem 0;position:relative}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3rem}
+.why-card{padding:2rem;background:var(--glass);border:1px solid var(--glass-border);border-radius:1.25rem;transition:all .4s var(--ease-out);position:relative;overflow:hidden}
+.why-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--grad1);opacity:0;transition:opacity .4s}
+.why-card:hover{border-color:var(--glass-border2);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.why-card:hover::before{opacity:1}
+.why-icon{width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(59,130,246,.1);color:var(--blue);font-size:1.1rem;margin-bottom:1.25rem;transition:all .3s}
+.why-card:hover .why-icon{background:rgba(59,130,246,.2);transform:scale(1.05)}
+.why-card h3{font-family:var(--font-head);font-size:1.05rem;font-weight:600;margin-bottom:.5rem}
+.why-card p{font-size:.85rem;color:var(--grey4);line-height:1.6}
+
+/* SERVICES */
+#services{padding:8rem 0;position:relative;overflow:hidden}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.25rem;margin-top:3rem}
+.service-card{padding:2rem;background:var(--glass);border:1px solid var(--glass-border);border-radius:1.25rem;transition:all .4s var(--ease-out);position:relative;overflow:hidden;display:flex;flex-direction:column}
+.service-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(59,130,246,.08),transparent 60%);opacity:0;transition:opacity .4s}
+.service-card:hover::after{opacity:1}
+.service-card:hover{border-color:var(--glass-border2);transform:translateY(-4px)}
+.service-icon{width:52px;height:52px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:rgba(139,92,246,.1);color:var(--purple);font-size:1.2rem;margin-bottom:1.5rem;position:relative;z-index:1}
+.service-card:nth-child(even) .service-icon{background:rgba(59,130,246,.1);color:var(--blue)}
+.service-card:nth-child(3n) .service-icon{background:rgba(6,182,212,.1);color:var(--cyan)}
+.service-card h3{font-family:var(--font-head);font-size:1.1rem;font-weight:600;margin-bottom:.5rem;position:relative;z-index:1}
+.service-card p{font-size:.85rem;color:var(--grey4);line-height:1.6;flex:1;position:relative;z-index:1}
+.service-link{display:inline-flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--grey3);margin-top:1.25rem;transition:color .3s;position:relative;z-index:1}
+.service-link:hover{color:var(--blue)}
+.service-link i{transition:transform .3s}
+.service-link:hover i{transform:translateX(4px)}
+
+/* PORTFOLIO */
+#portfolio{padding:8rem 0;position:relative}
+.filter-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.filter-btn{padding:.45rem 1.1rem;border:1px solid var(--glass-border);border-radius:100px;font-size:.72rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--grey4);transition:all .3s var(--ease-out)}
+.filter-btn:hover,.filter-btn.active{color:var(--white);border-color:var(--blue);background:rgba(59,130,246,.1)}
+.portfolio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.25rem}
+.portfolio-item{position:relative;border-radius:1.25rem;overflow:hidden;background:var(--glass);border:1px solid var(--glass-border);transition:all .5s var(--ease-out);aspect-ratio:16/10}
+.portfolio-item.hidden{display:none}
+.portfolio-thumb{width:100%;height:100%;background:var(--bg2);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.portfolio-thumb i{font-size:3rem;color:var(--grey6);transition:all .4s var(--ease-out)}
+.portfolio-item:hover .portfolio-thumb i{color:var(--blue);transform:scale(1.1)}
+.portfolio-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.2) 50%,transparent);display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem;opacity:0;transition:opacity .4s}
+.portfolio-item:hover .portfolio-overlay{opacity:1}
+.portfolio-overlay .cat{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:.25rem}
+.portfolio-overlay h3{font-family:var(--font-head);font-size:1.1rem;font-weight:600}
+.portfolio-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.8);width:56px;height:56px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);border-radius:50%;color:#fff;font-size:1.1rem;opacity:0;transition:all .4s var(--ease-out)}
+.portfolio-item:hover .portfolio-play{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.portfolio-play:hover{background:rgba(59,130,246,.4);transform:translate(-50%,-50%) scale(1.1)!important}
+
+/* TESTIMONIALS */
+#testimonials{padding:8rem 0;position:relative;overflow:hidden}
+.test-slider-wrap{overflow:hidden;margin-top:3rem;mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent)}
+.test-track{display:flex;gap:1.5rem;width:max-content;animation:testScroll 40s linear infinite}
+.test-track:hover{animation-play-state:paused}
+.test-card{width:400px;flex-shrink:0;padding:2rem;background:var(--glass);border:1px solid var(--glass-border);border-radius:1.25rem;transition:all .3s}
+.test-card:hover{border-color:var(--glass-border2)}
+.test-stars{color:#facc15;font-size:.75rem;margin-bottom:1rem;display:flex;gap:.2rem}
+.test-quote{font-size:.92rem;color:var(--grey2);line-height:1.7;margin-bottom:1.5rem;font-style:italic}
+.test-author{display:flex;align-items:center;gap:.75rem}
+.test-avatar{width:40px;height:40px;border-radius:50%;background:var(--grad1);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:.85rem;color:#fff}
+.test-info h4{font-family:var(--font-head);font-size:.9rem;font-weight:600}
+.test-info p{font-size:.75rem;color:var(--grey4)}
+@keyframes testScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* STATS */
+#stats{padding:6rem 0;position:relative}
+.stats-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1.5rem}
+.stat-item{text-align:center;padding:2rem 1rem}
+.stat-num{font-family:var(--font-head);font-size:clamp(2rem,4vw,3.2rem);font-weight:700;background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:.5rem}
+.stat-label{font-size:.78rem;color:var(--grey4);letter-spacing:.04em;text-transform:uppercase}
+
+/* SKILLS */
+#skills{padding:8rem 0;position:relative}
+.skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:3rem}
+.skill-card{padding:1.5rem;background:var(--glass);border:1px solid var(--glass-border);border-radius:1rem;text-align:center;transition:all .3s var(--ease-out)}
+.skill-card:hover{border-color:var(--glass-border2);transform:translateY(-3px)}
+.skill-card i{font-size:1.5rem;color:var(--purple);margin-bottom:.75rem;display:block}
+.skill-card:nth-child(even) i{color:var(--blue)}
+.skill-card:nth-child(3n) i{color:var(--cyan)}
+.skill-card h4{font-family:var(--font-head);font-size:.85rem;font-weight:600;margin-bottom:.5rem}
+.skill-bar{height:3px;background:var(--grey7);border-radius:2px;overflow:hidden}
+.skill-bar-fill{height:100%;background:var(--grad1);border-radius:2px;width:0;transition:width 1.5s var(--ease-out)}
+
+/* WORKFLOW */
+#workflow{padding:8rem 0;position:relative}
+.workflow-timeline{margin-top:3rem;position:relative}
+.workflow-line{position:absolute;left:24px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--blue),var(--purple),var(--cyan))}
+.workflow-step{display:flex;gap:2rem;padding:1.5rem 0;position:relative}
+.workflow-num{width:48px;height:48px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--bg);border:2px solid var(--grey6);font-family:var(--font-head);font-weight:700;font-size:.9rem;color:var(--grey4);position:relative;z-index:1;transition:all .4s var(--ease-out)}
+.workflow-step.active .workflow-num{border-color:var(--blue);color:var(--blue);box-shadow:0 0 20px rgba(59,130,246,.3)}
+.workflow-content{padding-top:.5rem}
+.workflow-content h3{font-family:var(--font-head);font-size:1.15rem;font-weight:600;margin-bottom:.35rem}
+.workflow-content p{font-size:.88rem;color:var(--grey4);line-height:1.6}
+
+/* CONTACT */
+#contact{padding:8rem 0;position:relative}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3rem;align-items:start}
+.contact-info{display:flex;flex-direction:column;gap:1.25rem}
+.contact-card{display:flex;align-items:center;gap:1.25rem;padding:1.5rem;background:var(--glass);border:1px solid var(--glass-border);border-radius:1rem;transition:all .3s var(--ease-out);cursor:none}
+.contact-card:hover{border-color:var(--glass-border2);transform:translateX(4px)}
+.contact-card-icon{width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(59,130,246,.1);color:var(--blue);font-size:1.1rem;flex-shrink:0}
+.contact-card-text h4{font-family:var(--font-head);font-size:.9rem;font-weight:600;margin-bottom:.15rem}
+.contact-card-text p{font-size:.82rem;color:var(--grey4)}
+.contact-card-text .copy-hint{font-size:.65rem;color:var(--grey5);margin-top:.25rem;opacity:0;transition:opacity .3s}
+.contact-card:hover .copy-hint{opacity:1}
+.contact-cta{padding:3rem;background:var(--glass);border:1px solid var(--glass-border);border-radius:1.5rem;text-align:center}
+.contact-cta h3{font-family:var(--font-head);font-size:1.5rem;font-weight:600;margin-bottom:.75rem}
+.contact-cta p{font-size:.9rem;color:var(--grey4);margin-bottom:2rem;line-height:1.6}
+.contact-btns{display:flex;flex-direction:column;gap:.75rem}
+.contact-btn{display:flex;align-items:center;justify-content:center;gap:.6rem;padding:1rem;border-radius:100px;font-size:.82rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;transition:all .3s var(--ease-out)}
+.contact-btn.wa{background:#25D366;color:#fff}
+.contact-btn.wa:hover{background:#20bd5a;transform:translateY(-2px);box-shadow:0 10px 30px rgba(37,211,102,.25)}
+.contact-btn.ig{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:#fff}
+.contact-btn.ig:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(131,58,180,.25)}
+
+/* FLOATING WA */
+.float-wa{position:fixed;bottom:2rem;right:2rem;z-index:90;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:all .3s var(--ease-out);animation:waPulse 3s ease-in-out infinite}
+.float-wa:hover{transform:scale(1.1);box-shadow:0 6px 30px rgba(37,211,102,.5)}
+@keyframes waPulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.4)}50%{box-shadow:0 4px 30px rgba(37,211,102,.6),0 0 0 10px rgba(37,211,102,.1)}}
+
+/* FOOTER */
+footer{position:relative;z-index:1;border-top:1px solid var(--glass-border);padding:4rem 0 2rem}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.footer-brand .nav-logo{margin-bottom:1rem;display:inline-block}
+.footer-brand p{font-size:.85rem;color:var(--grey4);line-height:1.7;max-width:300px}
+.footer-col h4{font-family:var(--font-head);font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--grey3);margin-bottom:1.25rem}
+.footer-col a{display:block;font-size:.85rem;color:var(--grey4);margin-bottom:.6rem;transition:color .3s}
+.footer-col a:hover{color:var(--white)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:2rem;border-top:1px solid var(--glass-border)}
+.footer-bottom p{font-size:.75rem;color:var(--grey5)}
+.footer-socials{display:flex;gap:.75rem}
+.footer-socials a{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid var(--glass-border);border-radius:50%;color:var(--grey4);font-size:.8rem;transition:all .3s}
+.footer-socials a:hover{color:var(--white);border-color:var(--blue);background:rgba(59,130,246,.1)}
+.back-top{position:fixed;bottom:2rem;left:2rem;z-index:90;width:44px;height:44px;border-radius:50%;background:var(--glass);border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;color:var(--grey4);font-size:.85rem;transition:all .3s var(--ease-out);opacity:0;visibility:hidden;transform:translateY(10px)}
+.back-top.visible{opacity:1;visibility:visible;transform:translateY(0)}
+.back-top:hover{color:var(--white);border-color:var(--blue);background:rgba(59,130,246,.1)}
+
+/* MODAL */
+.modal{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.9);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all .4s var(--ease-out)}
+.modal.active{opacity:1;visibility:visible}
+.modal-inner{width:90%;max-width:960px;aspect-ratio:16/9;border-radius:1rem;overflow:hidden;transform:scale(.9);transition:transform .4s var(--ease-out);position:relative}
+.modal.active .modal-inner{transform:scale(1)}
+.modal-inner iframe{width:100%;height:100%;border:none}
+.modal-close{position:absolute;top:-3rem;right:0;width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:var(--grey3);font-size:1.2rem;transition:color .3s}
+.modal-close:hover{color:var(--white)}
+
+/* TOAST */
+.toast{position:fixed;bottom:6rem;left:50%;transform:translateX(-50%) translateY(20px);padding:.75rem 1.5rem;background:rgba(59,130,246,.9);backdrop-filter:blur(10px);border-radius:100px;font-size:.8rem;font-weight:500;color:#fff;z-index:300;opacity:0;transition:all .3s var(--ease-out);pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(40px);transition:all .8s var(--ease-out)}
+.reveal.active{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.4s}
+.reveal-delay-5{transition-delay:.5s}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .hero-image-wrap{position:relative;right:auto;top:auto;transform:none;display:flex;justify-content:center;margin-top:3rem}
+  .about-grid{grid-template-columns:1fr;gap:2rem}
+  .about-visual{aspect-ratio:16/9;max-height:400px}
+  .why-grid{grid-template-columns:repeat(2,1fr)}
+  .stats-grid{grid-template-columns:repeat(3,1fr)}
+  .skills-grid{grid-template-columns:repeat(3,1fr)}
+  .contact-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .hero-title{font-size:clamp(2rem,8vw,3rem)}
+  .services-grid{grid-template-columns:1fr}
+  .why-grid{grid-template-columns:1fr}
+  .portfolio-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .skills-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;gap:1rem;text-align:center}
+  .test-card{width:300px}
+  .cursor-outer,.cursor-inner{display:none}
+  body{cursor:auto}
+  a,button{cursor:auto}
+  .container{padding:0 1.25rem}
+  section{padding-left:0;padding-right:0}
+  .float-wa{bottom:1.25rem;right:1.25rem}
+  .back-top{bottom:1.25rem;left:1.25rem}
+}
+@media(max-width:480px){
+  .hero-btns{flex-direction:column}
+  .btn-primary,.btn-outline{justify-content:center}
+  .about-highlights{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:.75rem}
+  .stat-item{padding:1.25rem .5rem}
+  .filter-bar{gap:.35rem}
+  .filter-btn{padding:.35rem .75rem;font-size:.65rem}
+}
+
+/* REDUCED MOTION */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .test-track{animation:none}
+  .hero-image-float{animation:none}
+  .scroll-line::after{animation:none}
+  .orb{animation:none}
+  .float-wa{animation:none}
+}
+</style>
+</head>
+<body class="loading">
+
+<!-- NOISE -->
+<div class="noise" aria-hidden="true"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">HK</div>
+  <div class="loader-bar-wrap"><div class="loader-bar" id="loaderBar"></div></div>
+  <div class="loader-pct" id="loaderPct">0%</div>
+</div>
+
+<!-- CURSOR -->
+<div class="cursor-outer" id="cursorOuter" aria-hidden="true"></div>
+<div class="cursor-inner" id="cursorInner" aria-hidden="true"></div>
+
+<!-- PARTICLES -->
+<canvas id="particles" aria-hidden="true"></canvas>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">HK</a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#testimonials">Reviews</a>
+    <a href="#contact" class="nav-cta">Let's Talk</a>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about">About</a>
+  <a href="#services">Services</a>
+  <a href="#portfolio">Portfolio</a>
+  <a href="#testimonials">Reviews</a>
+  <a href="#skills">Skills</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg grid-bg" aria-hidden="true"></div>
+  <div class="hero-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="container" style="display:flex;align-items:center;min-height:100vh;flex-wrap:wrap;gap:2rem;position:relative;z-index:2">
+    <div class="hero-content" style="flex:1;min-width:300px">
+      <div class="hero-badge"><i class="fas fa-circle"></i> Premium Medical Video Editor</div>
+      <h1 class="hero-title">Where Medicine Meets <span class="gradient">Cinematic Storytelling</span></h1>
+      <p class="hero-sub">Helping doctors create compelling video content that builds trust, strengthens personal brands, and attracts more patients.</p>
+      <div class="hero-btns">
+        <a href="#portfolio" class="btn-primary"><span>View My Work</span><i class="fas fa-arrow-right"></i></a>
+        <a href="#contact" class="btn-outline"><span>Let's Talk</span><i class="fas fa-arrow-down"></i></a>
+      </div>
+      <div class="hero-socials">
+        <a href="https://www.instagram.com/hesham_khalaf_1" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://wa.me/201550702060" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="mailto:hesham@example.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+      </div>
+    </div>
+    <div class="hero-image-wrap" style="flex:0 0 auto">
+      <div class="hero-image-float">
+        <div class="hero-image-3d" id="heroImage3d">
+          <div class="hero-image-glow" aria-hidden="true"></div>
+          <img src="1.png" alt="Hesham Mahmoud Khalaf - Medical Video Editor" loading="eager">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <img src="1.png" alt="Hesham Mahmoud Khalaf" loading="lazy">
+        <div class="about-visual-overlay"></div>
+        <div class="about-visual-badge">
+          <div class="num">3+</div>
+          <div class="txt">Years of Excellence</div>
+        </div>
+      </div>
+      <div class="about-text">
+        <div class="section-label reveal">About Me</div>
+        <h2 class="section-title reveal">Turning Medical Expertise Into Visual Masterpieces</h2>
+        <p class="reveal">I'm <strong>Hesham Mahmoud Khalaf</strong>, a dental student at SU²³⁰ who discovered that the gap between exceptional medical skills and a thriving practice isn't clinical ability — it's <strong>visibility</strong>.</p>
+        <p class="reveal">I bridge that gap. With a deep understanding of medical terminology, patient psychology, and platform algorithms, I craft video content that doesn't just look cinematic — it <strong>converts viewers into patients</strong>.</p>
+        <p class="reveal">Every frame I edit is intentional. Every transition serves a purpose. Every video I deliver is designed to position you as the <strong>go-to authority</strong> in your field.</p>
+        <div class="about-highlights">
+          <div class="about-hl reveal reveal-delay-1">
+            <i class="fas fa-graduation-cap"></i>
+            <h4>Medical Background</h4>
+            <p>Dental student who speaks your language</p>
+          </div>
+          <div class="about-hl reveal reveal-delay-2">
+            <i class="fas fa-bullseye"></i>
+            <h4>Patient-Focused</h4>
+            <p>Content designed to attract & convert</p>
+          </div>
+          <div class="about-hl reveal reveal-delay-3">
+            <i class="fas fa-award"></i>
+            <h4>Premium Quality</h4>
+            <p>Cinematic output, every single time</p>
+          </div>
+          <div class="about-hl reveal reveal-delay-4">
+            <i class="fas fa-chart-line"></i>
+            <h4>Results Driven</h4>
+            <p>Strategy-backed content creation</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY WORK WITH ME -->
+<section id="why">
+  <div class="container">
+    <div class="section-label reveal">Why Work With Me</div>
+    <h2 class="section-title reveal">Not Just an Editor — A Strategic Partner</h2>
+    <p class="section-desc reveal">I don't just cut clips. I understand the medical landscape, patient behavior, and what makes content go viral in healthcare.</p>
+    <div class="why-grid">
+      <div class="why-card reveal reveal-delay-1">
+        <div class="why-icon"><i class="fas fa-stethoscope"></i></div>
+        <h3>Medical Knowledge</h3>
+        <p>I understand procedures, terminology, and patient concerns — no endless explanations needed.</p>
+      </div>
+      <div class="why-card reveal reveal-delay-2">
+        <div class="why-icon"><i class="fas fa-comments"></i></div>
+        <h3>Clear Communication</h3>
+        <p>Professional, responsive, and always on the same page. You'll never wonder what's happening.</p>
+      </div>
+      <div class="why-card reveal reveal-delay-3">
+        <div class="why-icon"><i class="fas fa-gem"></i></div>
+        <h3>Premium Quality</h3>
+        <p>Every project gets the same elite treatment — cinematic color, smooth motion, polished audio.</p>
+      </div>
+      <div class="why-card reveal reveal-delay-1">
+        <div class="why-icon"><i class="fas fa-bolt"></i></div>
+        <h3>Fast Delivery</h3>
+        <p>Respect for your time. Quick turnarounds without ever compromising on quality.</p>
+      </div>
+      <div class="why-card reveal reveal-delay-2">
+        <div class="why-icon"><i class="fas fa-fingerprint"></i></div>
+        <h3>Brand Understanding</h3>
+        <p>I study your brand voice, audience, and goals before touching a single frame.</p>
+      </div>
+      <div class="why-card reveal reveal-delay-3">
+        <div class="why-icon"><i class="fas fa-lightbulb"></i></div>
+        <h3>Content Strategy</h3>
+        <p>Not just execution — I help plan what content will actually grow your practice.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <div class="section-label reveal">Services</div>
+    <h2 class="section-title reveal">Everything You Need to Dominate Online</h2>
+    <p class="section-desc reveal">From quick reels to full-scale branding videos — I deliver premium content across every format.</p>
+    <div class="services-grid">
+      <div class="service-card reveal reveal-delay-1" data-service="reels">
+        <div class="service-icon"><i class="fas fa-film"></i></div>
+        <h3>Medical Reels</h3>
+        <p>Scroll-stopping reels that showcase procedures, patient transformations, and behind-the-scenes content.</p>
+        <a href="YOUTUBE_LINK_REELS" target="_blank" class="service-link">View Examples <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal reveal-delay-2" data-service="motion">
+        <div class="service-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+        <h3>Motion Graphics</h3>
+        <p>Animated text, infographics, and visual effects that make complex medical concepts easy to understand.</p>
+        <a href="YOUTUBE_LINK_MOTION" target="_blank" class="service-link">View Examples <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal reveal-delay-3" data-service="shorts">
+        <div class="service-icon"><i class="fas fa-clapperboard"></i></div>
+        <h3>Short Form Videos</h3>
+        <p>TikToks, Shorts, and vertical videos engineered for maximum reach and engagement.</p>
+        <a href="YOUTUBE_LINK_SHORTS" target="_blank" class="service-link">View Examples <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal reveal-delay-1" data-service="longform">
+        <div class="service-icon"><i class="fas fa-video"></i></div>
+        <h3>Long Form Editing</h3>
+        <p>Full YouTube videos, webinars, and educational content with professional pacing and storytelling.</p>
+        <a href="YOUTUBE_LINK_LONGFORM" target="_blank" class="service-link">View Examples <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal reveal-delay-2" data-service="ads">
+        <div class="service-icon"><i class="fas fa-bullhorn"></i></div>
+        <h3>Social Media Ads</h3>
+        <p>High-converting ad creatives designed to turn ad spend into patient bookings.</p>
+        <a href="YOUTUBE_LINK_ADS" target="_blank" class="service-link">View Examples <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal reveal-delay-3" data-service="branding">
+        <div class="service-icon"><i class="fas fa-crown"></i></div>
+        <h3>Personal Branding</h3>
+        <p>Videos that establish you as the authority in your specialty and build unshakable trust.</p>
+        <a href="YOUTUBE_LINK_BRANDING" target="_blank" class="service-link">View Examples <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal reveal-delay-1" data-service="educational">
+        <div class="service-icon"><i class="fas fa-book-medical"></i></div>
+        <h3>Educational Medical Videos</h3>
+        <p>Break down complex procedures and concepts into visually engaging, patient-friendly content.</p>
+        <a href="YOUTUBE_LINK_EDUCATIONAL" target="_blank" class="service-link">View Examples <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal reveal-delay-2" data-service="podcast">
+        <div class="service-icon"><i class="fas fa-podcast"></i></div>
+        <h3>Podcast Editing</h3>
+        <p>Full podcast post-production — multi-cam editing, audio cleanup, graphics, and show packaging.</p>
+        <a href="YOUTUBE_LINK_PODCAST" target="_blank" class="service-link">View Examples <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal reveal-delay-3" data-service="beforeafter">
+        <div class="service-icon"><i class="fas fa-arrows-left-right"></i></div>
+        <h3>Before & After</h3>
+        <p>Stunning transformation reveals that visually demonstrate your expertise and results.</p>
+        <a href="YOUTUBE_LINK_BEFORE_AFTER" target="_blank" class="service-link">View Examples <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal reveal-delay-1" data-service="youtube">
+        <div class="service-icon"><i class="fab fa-youtube"></i></div>
+        <h3>YouTube Videos</h3>
+        <p>Full YouTube channel management — editing, thumbnails, SEO optimization, and growth strategy.</p>
+        <a href="YOUTUBE_LINK_YOUTUBE" target="_blank" class="service-link">View Examples <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="container">
+    <div class="section-label reveal">Portfolio</div>
+    <h2 class="section-title reveal">Selected Works</h2>
+    <p class="section-desc reveal">A curated selection of projects that showcase the range and quality of my work.</p>
+    <div class="filter-bar reveal" role="tablist">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="reels">Reels</button>
+      <button class="filter-btn" data-filter="motion">Motion</button>
+      <button class="filter-btn" data-filter="shorts">Short Form</button>
+      <button class="filter-btn" data-filter="longform">Long Form</button>
+      <button class="filter-btn" data-filter="ads">Ads</button>
+      <button class="filter-btn" data-filter="branding">Branding</button>
+      <button class="filter-btn" data-filter="educational">Educational</button>
+      <button class="filter-btn" data-filter="youtube">YouTube</button>
+    </div>
+    <div class="portfolio-grid" id="portfolioGrid">
+      <div class="portfolio-item reveal" data-category="reels" data-video="VIDEO_LINK_1">
+        <div class="portfolio-thumb"><i class="fas fa-play-circle"></i></div>
+        <div class="portfolio-overlay"><span class="cat">Medical Reels</span><h3>Dental Implant Procedure Reel</h3></div>
+        <div class="portfolio-play"><i class="fas fa-play"></i></div>
+      </div>
+      <div class="portfolio-item reveal" data-category="motion" data-video="VIDEO_LINK_2">
+        <div class="portfolio-thumb"><i class="fas fa-play-circle"></i></div>
+        <div class="portfolio-overlay"><span class="cat">Motion Graphics</span><h3>Animated Medical Infographic</h3></div>
+        <div class="portfolio-play"><i class="fas fa-play"></i></div>
+      </div>
+      <div class="portfolio-item reveal" data-category="branding" data-video="VIDEO_LINK_3">
+        <div class="portfolio-thumb"><i class="fas fa-play-circle"></i></div>
+        <div class="portfolio-overlay"><span class="cat">Personal Branding</span><h3>Doctor Brand Introduction Video</h3></div>
+        <div class="portfolio-play"><i class="fas fa-play"></i></div>
+      </div>
+      <div class="portfolio-item reveal" data-category="shorts" data-video="VIDEO_LINK_4">
+        <div class="portfolio-thumb"><i class="fas fa-play-circle"></i></div>
+        <div class="portfolio-overlay"><span class="cat">Short Form</span><h3>30-Second Clinic Tour</h3></div>
+        <div class="portfolio-play"><i class="fas fa-play"></i></div>
+      </div>
+      <div class="portfolio-item reveal" data-category="educational" data-video="VIDEO_LINK_5">
+        <div class="portfolio-thumb"><i class="fas fa-play-circle"></i></div>
+        <div class="portfolio-overlay"><span class="cat">Educational</span><h3>Root Canal Explained Simply</h3></div>
+        <div class="portfolio-play"><i class="fas fa-play"></i></div>
+      </div>
+      <div class="portfolio-item reveal" data-category="youtube" data-video="VIDEO_LINK_1">
+        <div class="portfolio-thumb"><i class="fas fa-play-circle"></i></div>
+        <div class="portfolio-overlay"><span class="cat">YouTube</span><h3>Full Patient Consultation Video</h3></div>
+        <div class="portfolio-play"><i class="fas fa-play"></i></div>
+      </div>
+      <div class="portfolio-item reveal" data-category="ads" data-video="VIDEO_LINK_2">
+        <div class="portfolio-thumb"><i class="fas fa-play-circle"></i></div>
+        <div class="portfolio-overlay"><span class="cat">Social Ads</span><h3>Smile Makeover Ad Creative</h3></div>
+        <div class="portfolio-play"><i class="fas fa-play"></i></div>
+      </div>
+      <div class="portfolio-item reveal" data-category="longform" data-video="VIDEO_LINK_3">
+        <div class="portfolio-thumb"><i class="fas fa-play-circle"></i></div>
+        <div class="portfolio-overlay"><span class="cat">Long Form</span><h3>Complete Surgery Documentary</h3></div>
+        <div class="portfolio-play"><i class="fas fa-play"></i></div>
+      </div>
+      <div class="portfolio-item reveal" data-category="reels" data-video="VIDEO_LINK_4">
+        <div class="portfolio-thumb"><i class="fas fa-play-circle"></i></div>
+        <div class="portfolio-overlay"><span class="cat">Medical Reels</span><h3>Before & After Smile Reveal</h3></div>
+        <div class="portfolio-play"><i class="fas fa-play"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="container">
+    <div class="section-label reveal">Testimonials</div>
+    <h2 class="section-title reveal">What Doctors Say</h2>
+    <p class="section-desc reveal">Real feedback from medical professionals who've elevated their online presence.</p>
+  </div>
+  <div class="test-slider-wrap">
+    <div class="test-track" id="testTrack">
+      <div class="test-card">
+        <div class="test-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="test-quote">"Hesham completely transformed my social media. My patient inquiries tripled in just two months. He doesn't just edit — he thinks like a marketer."</p>
+        <div class="test-author"><div class="test-avatar">AH</div><div class="test-info"><h4>Dr. Ahmed Hassan</h4><p>Oral Surgeon, Cairo</p></div></div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="test-quote">"The quality is unreal. Every reel feels like it was made by a production studio, not a freelancer. Hesham understands what patients want to see."</p>
+        <div class="test-author"><div class="test-avatar">SE</div><div class="test-info"><h4>Dr. Sara El-Masry</h4><p>Dermatologist, Alexandria</p></div></div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="test-quote">"I was skeptical about video content for my practice. Hesham proved me wrong. My YouTube channel went from 200 to 15K subscribers."</p>
+        <div class="test-author"><div class="test-avatar">MK</div><div class="test-info"><h4>Dr. Mohamed Kamel</h4><p>Orthodontist, Giza</p></div></div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="test-quote">"Working with someone who actually understands dentistry made everything so much easier. No more explaining basic terms. He just gets it."</p>
+        <div class="test-author"><div class="test-avatar">LA</div><div class="test-info"><h4>Dr. Layla Abdel-Rahim</h4><p>Prosthodontist, Mansoura</p></div></div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="test-quote">"The ad creatives Hesham made for my clinic brought in 47 new patients in the first month. ROI was incredible."</p>
+        <div class="test-author"><div class="test-avatar">OA</div><div class="test-info"><h4>Dr. Omar Ashraf</h4><p>General Dentist, Nasr City</p></div></div>
+      </div>
+      <!-- Duplicate for infinite scroll -->
+      <div class="test-card">
+        <div class="test-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="test-quote">"Hesham completely transformed my social media. My patient inquiries tripled in just two months. He doesn't just edit — he thinks like a marketer."</p>
+        <div class="test-author"><div class="test-avatar">AH</div><div class="test-info"><h4>Dr. Ahmed Hassan</h4><p>Oral Surgeon, Cairo</p></div></div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="test-quote">"The quality is unreal. Every reel feels like it was made by a production studio, not a freelancer. Hesham understands what patients want to see."</p>
+        <div class="test-author"><div class="test-avatar">SE</div><div class="test-info"><h4>Dr. Sara El-Masry</h4><p>Dermatologist, Alexandria</p></div></div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="test-quote">"I was skeptical about video content for my practice. Hesham proved me wrong. My YouTube channel went from 200 to 15K subscribers."</p>
+        <div class="test-author"><div class="test-avatar">MK</div><div class="test-info"><h4>Dr. Mohamed Kamel</h4><p>Orthodontist, Giza</p></div></div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="test-quote">"Working with someone who actually understands dentistry made everything so much easier. No more explaining basic terms. He just gets it."</p>
+        <div class="test-author"><div class="test-avatar">LA</div><div class="test-info"><h4>Dr. Layla Abdel-Rahim</h4><p>Prosthodontist, Mansoura</p></div></div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="test-quote">"The ad creatives Hesham made for my clinic brought in 47 new patients in the first month. ROI was incredible."</p>
+        <div class="test-author"><div class="test-avatar">OA</div><div class="test-info"><h4>Dr. Omar Ashraf</h4><p>General Dentist, Nasr City</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <div class="stat-num" data-target="200">0</div>
+        <div class="stat-label">Projects Completed</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-1">
+        <div class="stat-num" data-target="50">0</div>
+        <div class="stat-label">Happy Clients</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-2">
+        <div class="stat-num" data-target="10" data-suffix="M+">0</div>
+        <div class="stat-label">Views Generated</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <div class="stat-num" data-target="5000" data-suffix="+">0</div>
+        <div class="stat-label">Hours Edited</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-4">
+        <div class="stat-num" data-target="3" data-suffix="+">0</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-5">
+        <div class="stat-num" data-target="300" data-suffix="%">0</div>
+        <div class="stat-label">Avg Engagement ↑</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <div class="section-label reveal">Skills & Tools</div>
+    <h2 class="section-title reveal">My Creative Arsenal</h2>
+    <p class="section-desc reveal">Mastering the tools that bring your vision to life with precision and artistry.</p>
+    <div class="skills-grid">
+      <div class="skill-card reveal" data-skill="95">
+        <i class="fas fa-film"></i>
+        <h4>Adobe Premiere Pro</h4>
+        <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+      </div>
+      <div class="skill-card reveal" data-skill="90">
+        <i class="fas fa-magic"></i>
+        <h4>After Effects</h4>
+        <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+      </div>
+      <div class="skill-card reveal" data-skill="85">
+        <i class="fas fa-palette"></i>
+        <h4>Photoshop</h4>
+        <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+      </div>
+      <div class="skill-card reveal" data-skill="80">
+        <i class="fas fa-pen-nib"></i>
+        <h4>Illustrator</h4>
+        <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+      </div>
+      <div class="skill-card reveal" data-skill="88">
+        <i class="fas fa-circle-half-stroke"></i>
+        <h4>DaVinci Resolve</h4>
+        <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+      </div>
+      <div class="skill-card reveal" data-skill="92">
+        <i class="fas fa-mobile-screen"></i>
+        <h4>CapCut Pro</h4>
+        <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+      </div>
+      <div class="skill-card reveal" data-skill="87">
+        <i class="fas fa-shapes"></i>
+        <h4>Motion Graphics</h4>
+        <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+      </div>
+      <div class="skill-card reveal" data-skill="83">
+        <i class="fas fa-volume-high"></i>
+        <h4>Sound Design</h4>
+        <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+      </div>
+      <div class="skill-card reveal" data-skill="90">
+        <i class="fas fa-droplet"></i>
+        <h4>Color Grading</h4>
+        <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+      </div>
+      <div class="skill-card reveal" data-skill="85">
+        <i class="fab fa-youtube"></i>
+        <h4>YouTube Optimization</h4>
+        <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+      </div>
+      <div class="skill-card reveal" data-skill="82">
+        <i class="fas fa-chess"></i>
+        <h4>Content Strategy</h4>
+        <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+      </div>
+      <div class="skill-card reveal" data-skill="88">
+        <i class="fas fa-crown"></i>
+        <h4>Personal Branding</h4>
+        <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKFLOW -->
+<section id="workflow">
+  <div class="container">
+    <div class="section-label reveal">Workflow</div>
+    <h2 class="section-title reveal">How I Bring Your Vision to Life</h2>
+    <p class="section-desc reveal">A refined process designed for efficiency, quality, and your complete satisfaction.</p>
+    <div class="workflow-timeline">
+      <div class="workflow-line" aria-hidden="true"></div>
+      <div class="workflow-step reveal">
+        <div class="workflow-num">01</div>
+        <div class="workflow-content"><h3>Discovery & Strategy</h3><p>We discuss your goals, target audience, brand voice, and content objectives to build a clear creative direction.</p></div>
+      </div>
+      <div class="workflow-step reveal">
+        <div class="workflow-num">02</div>
+        <div class="workflow-content"><h3>Scripting & Planning</h3><p>Structured outlines, shot lists, and scripting that ensure every second of your video serves a purpose.</p></div>
+      </div>
+      <div class="workflow-step reveal">
+        <div class="workflow-num">03</div>
+        <div class="workflow-content"><h3>Editing & Assembly</h3><p>Professional cutting, pacing, and storytelling that keeps viewers engaged from start to finish.</p></div>
+      </div>
+      <div class="workflow-step reveal">
+        <div class="workflow-num">04</div>
+        <div class="workflow-content"><h3>Motion Graphics & Effects</h3><p>Custom animations, text overlays, lower thirds, and visual effects that elevate production value.</p></div>
+      </div>
+      <div class="workflow-step reveal">
+        <div class="workflow-num">05</div>
+        <div class="workflow-content"><h3>Color Grading & Sound</h3><p>Cinematic color correction, audio enhancement, music selection, and sound design for a polished final product.</p></div>
+      </div>
+      <div class="workflow-step reveal">
+        <div class="workflow-num">06</div>
+        <div class="workflow-content"><h3>Review & Delivery</h3><p>Your feedback is incorporated, final exports are optimized for every platform, and files are delivered ready to publish.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-label reveal">Get In Touch</div>
+    <h2 class="section-title reveal">Let's Create Something Extraordinary</h2>
+    <p class="section-desc reveal">Ready to elevate your medical practice with premium video content? Let's talk.</p>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-card reveal" onclick="copyToClipboard('01550702060','Phone number')">
+          <div class="contact-card-icon"><i class="fas fa-phone"></i></div>
+          <div class="contact-card-text">
+            <h4>Phone / WhatsApp</h4>
+            <p>01550702060</p>
+            <div class="copy-hint"><i class="fas fa-copy"></i> Click to copy</div>
+          </div>
+        </div>
+        <div class="contact-card reveal reveal-delay-1" onclick="copyToClipboard('hesham@example.com','Email')">
+          <div class="contact-card-icon"><i class="fas fa-envelope"></i></div>
+          <div class="contact-card-text">
+            <h4>Email</h4>
+            <p>hesham@example.com</p>
+            <div class="copy-hint"><i class="fas fa-copy"></i> Click to copy</div>
+          </div>
+        </div>
+        <div class="contact-card reveal reveal-delay-2">
+          <a href="https://www.instagram.com/hesham_khalaf_1" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:1.25rem;width:100%">
+            <div class="contact-card-icon" style="background:rgba(225,48,108,.1);color:#E1306C"><i class="fab fa-instagram"></i></div>
+            <div class="contact-card-text">
+              <h4>Instagram</h4>
+              <p>@hesham_khalaf_1</p>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="contact-cta reveal">
+        <h3>Start Your Project Today</h3>
+        <p>Whether you need a single reel or a complete content strategy, I'm here to help you stand out.</p>
+        <div class="contact-btns">
+          <a href="https://wa.me/201550702060" target="_blank" rel="noopener" class="contact-btn wa"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+          <a href="https://www.instagram.com/hesham_khalaf_1" target="_blank" rel="noopener" class="contact-btn ig"><i class="fab fa-instagram"></i> Follow on Instagram</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#hero" class="nav-logo">HK</a>
+        <p>Premium Medical Video Editor helping doctors create compelling content that attracts patients and builds authority.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#testimonials">Reviews</a>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a href="#services">Medical Reels</a>
+        <a href="#services">Motion Graphics</a>
+        <a href="#services">YouTube Videos</a>
+        <a href="#services">Social Media Ads</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="https://wa.me/201550702060" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://www.instagram.com/hesham_khalaf_1" target="_blank" rel="noopener">Instagram</a>
+        <a href="mailto:hesham@example.com">Email</a>
+        <a href="tel:+201550702060">Phone</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Hesham Mahmoud Khalaf. All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/hesham_khalaf_1" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://wa.me/201550702060" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="mailto:hesham@example.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING WA -->
+<a href="https://wa.me/201550702060" target="_blank" rel="noopener" class="float-wa" aria-label="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+
+<!-- BACK TO TOP -->
+<button class="back-top" id="backTop" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<!-- VIDEO MODAL -->
+<div class="modal" id="videoModal">
+  <div class="modal-inner">
+    <button class="modal-close" id="modalClose" aria-label="Close video"><i class="fas fa-times"></i></button>
+    <iframe id="modalIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================
+   LOADER
+   ============================ */
+const loader = document.getElementById('loader');
+const loaderBar = document.getElementById('loaderBar');
+const loaderPct = document.getElementById('loaderPct');
+let loadProgress = 0;
+
+function updateLoader() {
+  loadProgress += Math.random() * 12 + 3;
+  if (loadProgress > 100) loadProgress = 100;
+  loaderBar.style.width = loadProgress + '%';
+  loaderPct.textContent = Math.floor(loadProgress) + '%';
+  if (loadProgress < 100) {
+    requestAnimationFrame(() => setTimeout(updateLoader, 60 + Math.random() * 80));
+  } else {
+    setTimeout(() => {
+      loader.classList.add('hidden');
+      document.body.classList.remove('loading');
+      initAnimations();
+    }, 400);
+  }
+}
+updateLoader();
+
+/* ============================
+   LENIS SMOOTH SCROLL
+   ============================ */
+const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true });
+function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+requestAnimationFrame(raf);
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time) => lenis.raf(time * 1000));
+gsap.ticker.lagSmoothing(0);
+
+/* ============================
+   CUSTOM CURSOR
+   ============================ */
+const cursorOuter = document.getElementById('cursorOuter');
+const cursorInner = document.getElementById('cursorInner');
+let mx = 0, my = 0, ox = 0, oy = 0;
+
+document.addEventListener('mousemove', (e) => {
+  mx = e.clientX; my = e.clientY;
+  cursorInner.style.left = mx + 'px';
+  cursorInner.style.top = my + 'px';
+});
+
+function animateCursor() {
+  ox += (mx - ox) * 0.12;
+  oy += (my - oy) * 0.12;
+  cursorOuter.style.left = ox + 'px';
+  cursorOuter.style.top = oy + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+document.querySelectorAll('a, button, .portfolio-item, .contact-card, .service-card, .why-card, .skill-card').forEach(el => {
+  el.addEventListener('mouseenter', () => cursorOuter.classList.add('hovering'));
+  el.addEventListener('mouseleave', () => cursorOuter.classList.remove('hovering'));
+});
+document.addEventListener('mousedown', () => cursorOuter.classList.add('clicking'));
+document.addEventListener('mouseup', () => cursorOuter.classList.remove('clicking'));
+
+/* ============================
+   PARTICLES
+   ============================ */
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let particles = [];
+const PARTICLE_COUNT = 80;
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 1.5 + 0.3;
+    this.speedX = (Math.random() - 0.5) * 0.3;
+    this.speedY = (Math.random() - 0.5) * 0.3;
+    this.opacity = Math.random() * 0.4 + 0.1;
+    this.color = ['59,130,246','139,92,246','6,182,212'][Math.floor(Math.random()*3)];
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    const dx = mx - this.x, dy = my - this.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist < 120) { this.x -= dx * 0.008; this.y -= dy * 0.008; }
+    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.color},${this.opacity})`;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+
+function drawLines() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(59,130,246,${0.06 * (1 - dist/120)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawLines();
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+/* ============================
+   HERO IMAGE 3D
+   ============================ */
+const heroImg = document.getElementById('heroImage3d');
+if (heroImg) {
+  document.addEventListener('mousemove', (e) => {
+    const rx = (e.clientX / window.innerWidth - 0.5) * 15;
+    const ry = (e.clientY / window.innerHeight - 0.5) * -15;
+    heroImg.style.transform = `perspective(1000px) rotateY(${rx}deg) rotateX(${ry}deg) translateZ(20px)`;
+  });
+}
+
+/* ============================
+   SERVICE CARD MOUSE GLOW
+   ============================ */
+document.querySelectorAll('.service-card').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mx', ((e.clientX - rect.left) / rect.width * 100) + '%');
+    card.style.setProperty('--my', ((e.clientY - rect.top) / rect.height * 100) + '%');
+  });
+});
+
+/* ============================
+   NAV SCROLL
+   ============================ */
+const nav = document.getElementById('nav');
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const st = window.scrollY;
+  nav.classList.toggle('scrolled', st > 50);
+  lastScroll = st;
+});
+
+/* ============================
+   HAMBURGER
+   ============================ */
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  mobileMenu.classList.toggle('active');
+  document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+});
+mobileMenu.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+});
+
+/* ============================
+   SCROLL REVEAL
+   ============================ */
+function initAnimations() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* GSAP ScrollTrigger for workflow steps */
+  gsap.registerPlugin(ScrollTrigger);
+  document.querySelectorAll('.workflow-step').forEach((step, i) => {
+    gsap.fromTo(step, { opacity: 0, x: -30 }, {
+      opacity: 1, x: 0, duration: 0.8, delay: i * 0.1,
+      scrollTrigger: { trigger: step, start: 'top 85%', toggleActions: 'play none none none' },
+      onComplete: () => step.classList.add('active')
+    });
+  });
+
+  /* Stats counter */
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.target);
+        const suffix = el.dataset.suffix || '+';
+        let current = 0;
+        const increment = target / 60;
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) { current = target; clearInterval(timer); }
+          el.textContent = (target >= 1000 ? Math.floor(current).toLocaleString() : Math.floor(current)) + suffix;
+        }, 25);
+        statsObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.stat-num').forEach(el => statsObserver.observe(el));
+
+  /* Skill bars */
+  const skillObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const card = entry.target;
+        const pct = card.dataset.skill;
+        card.querySelector('.skill-bar-fill').style.width = pct + '%';
+        skillObserver.unobserve(card);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.skill-card').forEach(el => skillObserver.observe(el));
+
+  /* Hero content GSAP */
+  gsap.from('.hero-badge', { opacity: 0, y: 20, duration: 0.8, delay: 0.2, ease: 'power3.out' });
+  gsap.from('.hero-title', { opacity: 0, y: 30, duration: 1, delay: 0.4, ease: 'power3.out' });
+  gsap.from('.hero-sub', { opacity: 0, y: 20, duration: 0.8, delay: 0.6, ease: 'power3.out' });
+  gsap.from('.hero-btns', { opacity: 0, y: 20, duration: 0.8, delay: 0.8, ease: 'power3.out' });
+  gsap.from('.hero-socials', { opacity: 0, y: 15, duration: 0.8, delay: 1, ease: 'power3.out' });
+  gsap.from('.hero-image-wrap', { opacity: 0, scale: 0.9, duration: 1.2, delay: 0.5, ease: 'power3.out' });
+  gsap.from('.hero-scroll', { opacity: 0, duration: 1, delay: 1.5, ease: 'power3.out' });
+
+  /* Parallax on hero orbs */
+  gsap.to('.orb-1', { y: -80, scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1 } });
+  gsap.to('.orb-2', { y: -120, scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.5 } });
+  gsap.to('.orb-3', { y: -60, scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 0.8 } });
+}
+
+/* ============================
+   PORTFOLIO FILTER
+   ============================ */
+const filterBtns = document.querySelectorAll('.filter-btn');
+const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    portfolioItems.forEach(item => {
+      if (filter === 'all' || item.dataset.category === filter) {
+        item.classList.remove('hidden');
+        gsap.from(item, { opacity: 0, y: 20, duration: 0.5, ease: 'power2.out' });
+      } else {
+        item.classList.add('hidden');
+      }
+    });
+  });
+});
+
+/* ============================
+   VIDEO MODAL
+   ============================ */
+const modal = document.getElementById('videoModal');
+const modalIframe = document.getElementById('modalIframe');
+const modalClose = document.getElementById('modalClose');
+
+function getYouTubeId(url) {
+  if (!url || url.startsWith('VIDEO_LINK')) return null;
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?\s]+)/);
+  return match ? match[1] : null;
+}
+
+document.querySelectorAll('.portfolio-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const videoUrl = item.dataset.video;
+    const videoId = getYouTubeId(videoUrl);
+    if (videoId) {
+      modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    } else {
+      showToast('Video link placeholder — replace VIDEO_LINK_* with real YouTube URLs');
+    }
+  });
+});
+
+function closeModal() {
+  modal.classList.remove('active');
+  modalIframe.src = '';
+  document.body.style.overflow = '';
+}
+modalClose.addEventListener('click', closeModal);
+modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+/* ============================
+   COPY TO CLIPBOARD
+   ============================ */
+function copyToClipboard(text, label) {
+  navigator.clipboard.writeText(text).then(() => {
+    showToast(`${label} copied to clipboard`);
+  }).catch(() => {
+    showToast('Failed to copy');
+  });
+}
+
+/* ============================
+   TOAST
+   ============================ */
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+/* ============================
+   BACK TO TOP
+   ============================ */
+const backTop = document.getElementById('backTop');
+window.addEventListener('scroll', () => {
+  backTop.classList.toggle('visible', window.scrollY > 600);
+});
+backTop.addEventListener('click', () => lenis.scrollTo(0));
+
+/* ============================
+   SMOOTH SCROLL ANCHORS
+   ============================ */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); lenis.scrollTo(target, { offset: -80 }); }
+  });
+});
+
+/* ============================
+   PORTFOLIO 3D TILT
+   ============================ */
+document.querySelectorAll('.portfolio-item').forEach(item => {
+  item.addEventListener('mousemove', (e) => {
+    const rect = item.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    item.style.transform = `perspective(800px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) scale(1.02)`;
+  });
+  item.addEventListener('mouseleave', () => {
+    item.style.transform = 'perspective(800px) rotateY(0) rotateX(0) scale(1)';
+  });
+});
+
+/* ============================
+   WHY CARDS 3D TILT
+   ============================ */
+document.querySelectorAll('.why-card').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(800px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-4px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(800px) rotateY(0) rotateX(0) translateY(0)';
+  });
+});
+</script>
+</body>
+</html>
